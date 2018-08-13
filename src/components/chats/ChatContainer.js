@@ -8,8 +8,8 @@ import MessageInput from '../messages/MessageInput'
 
 export default class ChatContainer extends Component {
 	constructor(props) {
-	  super(props);	
-	
+	  super(props);
+
 	  this.state = {
 	  	chats:[],
 	  	activeChat:null
@@ -33,7 +33,7 @@ export default class ChatContainer extends Component {
 	*	Adds chat to the chat container, if reset is true removes all chats
 	*	and sets that chat to the main chat.
 	*	Sets the message and typing socket events for the chat.
-	*	
+	*
 	*	@param chat {Chat} the chat to be added.
 	*	@param reset {boolean} if true will set the chat as the only chat.
 	*/
@@ -52,8 +52,8 @@ export default class ChatContainer extends Component {
 	}
 
 	/*
-	* 	Returns a function that will 
-	*	adds message to chat with the chatId passed in. 
+	* 	Returns a function that will
+	*	adds message to chat with the chatId passed in.
 	*
 	* 	@param chatId {number}
 	*/
@@ -122,7 +122,7 @@ export default class ChatContainer extends Component {
 		const { user, logout } = this.props
 		const { chats, activeChat } = this.state
 		return (
-			<div className="container">
+			<div className="chat">
 				<SideBar
 					logout={logout}
 					chats={chats}
@@ -136,12 +136,12 @@ export default class ChatContainer extends Component {
 
 							<div className="chat-room">
 								<ChatHeading name={activeChat.name} />
-								<Messages 
+								<Messages
 									messages={activeChat.messages}
 									user={user}
 									typingUsers={activeChat.typingUsers}
 									/>
-								<MessageInput 
+								<MessageInput
 									sendMessage={
 										(message)=>{
 											this.sendMessage(activeChat.id, message)

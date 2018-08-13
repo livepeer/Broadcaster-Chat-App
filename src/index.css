@@ -50,11 +50,31 @@ textarea {
     color: #c92c43
 }
 .video-container {
-    width: 19%;
-    height: 100%;
-    display: inline-block;
-    border: 5px solid black;
-    vertical-align: top;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  /* border: 5px solid black; */
+  vertical-align: top;
+}
+
+.tip-button {
+  width: 304px;
+  height: 89px;
+  background-size: 100%;
+  background-image: url('images/1_pay_mm_off.png');
+  cursor: pointer;
+}
+
+.left-container {
+  height: 100%;
+  display: inline-block;
+  width: 50%;
+}
+.tip-button:hover {
+  background-image: url('images/1_pay_mm_over.png');
+}
+.tip-button:active {
+  background-image: url('images/1_pay_mm_off.png');
 }
 
 .body-container {
@@ -62,9 +82,13 @@ textarea {
 }
 
 .chat-container {
-  width: 80%;
+  width: 50%;
   display: inline-block;
-  /* margin-left: 18%; */
+  height: 100%;
+}
+
+.streamId {
+  display: block;
 }
 
 .chat {
@@ -73,7 +97,7 @@ textarea {
   flex-direction: row;
   align-items: flex-start;
   height: 100%;
-  width: 100%%;
+  width: 100%;
 }
 
 #side-bar {

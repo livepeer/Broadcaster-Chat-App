@@ -3,7 +3,7 @@ import io from 'socket.io-client'
 import { USER_CONNECTED, LOGOUT } from '../Events'
 import LoginForm from './LoginForm'
 import ChatContainer from './chats/ChatContainer'
-
+import VideoContainer from './VideoContainer'
 const socketUrl = "http://localhost:3231"
 export default class Layout extends Component {
 
@@ -59,9 +59,7 @@ export default class Layout extends Component {
 		const { socket, user } = this.state
 		return (
 			<div className='body-container'>
-				<div className="video-container">
-					some stuff here
-				</div>
+				<VideoContainer />
 				<div className="chat-container">
 					{
 						!user ?
