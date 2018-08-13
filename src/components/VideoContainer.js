@@ -19,7 +19,7 @@ class VideoContainer extends Component {
 	}
 
 	source() {
-		var source = 'http://localhost:8935/stream/' + this.state.streamId + '.m3u8'
+		var source = 'http://35.170.68.143:8935/stream/' + this.state.streamId + '.m3u8'
 		return source
 	}
 
