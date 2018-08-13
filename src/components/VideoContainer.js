@@ -19,7 +19,7 @@ class VideoContainer extends Component {
 	}
 
 	source() {
-		var source = 'http://35.170.68.143:8935/stream/' + this.state.streamId + '.m3u8'
+		var source = 'http://' + this.state.ip + ':8935/stream/' + this.state.streamId + '.m3u8'
 		return source
 	}
 
@@ -27,7 +27,8 @@ class VideoContainer extends Component {
     return(
 			<div className='left-container'>
 				<div className="video-container">
-					<input value={this.state.streamId} className='streamId' onChange={(event) => {this.setState({streamId: event.target.value})}}></input>
+					<input defaultValue='My Stream Id' value={this.state.streamId} className='streamId' onChange={(event) => {this.setState({streamId: event.target.value})}}></input>
+					<input defaultValue='0.1.2.3' value={this.state.ip} className='streamId' onChange={(event) => {this.setState({ip: event.target.value})}}></input>
 					<div>
 						<div>
 							{this.state.streamId && <ReactHLS url={this.source()} />}
