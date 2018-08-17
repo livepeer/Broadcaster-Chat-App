@@ -39,7 +39,7 @@ We can use the Livepeer player but to understand what's happening, let's build o
 On our html page, we'll load the hls Javascript file, our local javascript file we're calling hlsplayer.js, our css and we'll have a div that contains our video element.  
 
 In our Javascript, we need to do a few things:
-- hard code our streamID (which can be found by running curl http://localhost:8935/manifestID which will request the streamId from the livepeer node)
+- hard code our streamID (which can be found by running ```curl http://localhost:8935/manifestID``` which will request the streamId from the livepeer node)
 - Set our source to be 'http://localhost:8935/stream/' + streamId + '.m3u8'
 - Create a new instance of HLS,
   - load the source
@@ -53,4 +53,4 @@ insert explanation of how livepeer works (the decentralized video transcoding pa
 
 We could also have used the livepeer.js video player to play the video, which is a wrapper around HLS.js
 
-Now that we know how to play video. 
+Now that we know how to play video using livepeer, let's build a client experience that's a bit richer than currently exists.  Imagine you're streaming video where a presenter is communicating with an in person audience as well as an online audience.  It would be great if the presenter could take questions/interact with the folks online.  Let's add a chatroom into the client app next to the live video stream.  Since we're already in the Ethereum ecosystem, it would also be great to allow consumers of the stream to tip the broadcaster natively in ETH.  
