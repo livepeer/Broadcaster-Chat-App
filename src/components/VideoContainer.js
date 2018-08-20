@@ -4,22 +4,16 @@ import axios from 'axios'
 import TipContainer from './TipContainer'
 // import 'react-hls/src/style.css'; // need to import basic styles
 // import 'react-hls/src/icons.css'; // need to import basic icons
+import config from 'react-global-configuration';
+import StreamInfo from './StreamInfo'
 class VideoContainer extends Component {
 	constructor(props) {
 	  super(props);
 		this.state = {}
 	}
 
-	componentDidMount() {
-		// axios.get('http://localhost:8935/manifestID')
-		// .then(function(response) {
-		// 	debugger
-		// 	this.setState({streamId: response.body.data})
-		// })
-	}
-
 	source() {
-		var source = 'http://' + this.state.ip + ':8935/stream/' + this.state.streamId + '.m3u8'
+		var source = 'http://' + config.get('serverIp') + ':8935/stream/' + this.props.streamId + '.m3u8'
 		return source
 	}
 
@@ -27,15 +21,14 @@ class VideoContainer extends Component {
     return(
 			<div className='left-container'>
 				<div className="video-container">
-					<input defaultValue='My Stream Id' value={this.state.streamId} className='streamId' onChange={(event) => {this.setState({streamId: event.target.value})}}></input>
-					<input defaultValue='0.1.2.3' value={this.state.ip} className='streamId' onChange={(event) => {this.setState({ip: event.target.value})}}></input>
 					<div>
 						<div>
-							{this.state.streamId && <ReactHLS url={this.source()} />}
+							<ReactHLS url={this.source()} />
 						</div>
 					</div>
 				</div>
 				<TipContainer />
+				<StreamInfo />
 			</div>
     )
   }

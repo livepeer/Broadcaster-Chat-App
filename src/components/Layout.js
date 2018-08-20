@@ -4,13 +4,13 @@ import { USER_CONNECTED, LOGOUT } from '../Events'
 import LoginForm from './LoginForm'
 import ChatContainer from './chats/ChatContainer'
 import VideoContainer from './VideoContainer'
-const socketUrl = "http://18.206.149.247:3231"
+import config from 'react-global-configuration';
 export default class Layout extends Component {
 
 	constructor(props) {
 	  super(props);
-
 	  this.state = {
+			socketUrl : "http://" + config.get('serverIp') + ":3231",
 	  	socket:null,
 	  	user:null
 	  };
@@ -24,7 +24,7 @@ export default class Layout extends Component {
 	*	Connect to and initializes the socket.
 	*/
 	initSocket = ()=>{
-		const socket = io(socketUrl)
+		const socket = io(this.state.socketUrl)
 
 		socket.on('connect', ()=>{
 			console.log("Connected");
@@ -59,7 +59,7 @@ export default class Layout extends Component {
 		const { socket, user } = this.state
 		return (
 			<div className='body-container'>
-				<VideoContainer />
+				<VideoContainer streamId={this.props.match.params.streamId}/>
 				<div className="chat-container">
 					{
 						!user ?
