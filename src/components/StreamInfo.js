@@ -29,7 +29,7 @@ class StreamInfo extends Component {
 
 	render() {
 		return (
-    	<div>
+    	<div className='stream-info-container'>
 				<div>{`The price for each 4 second segment is: ${this.state.pricePerSegment}`}</div>
 				<div>{`The cost to transcode this broadcast since you've been connected is: ${this.totalBroadcastPrice()}`}</div>
 			</div>
