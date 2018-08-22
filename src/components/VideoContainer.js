@@ -28,7 +28,7 @@ class VideoContainer extends Component {
 					</div>
 				</div>
 				<TipContainer />
-				<StreamInfo />
+				<StreamInfo streamId={this.props.streamId}/>
 			</div>
     )
   }
