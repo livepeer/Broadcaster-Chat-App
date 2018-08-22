@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Web3 from 'web3'
+import config from 'react-global-configuration';
+
 class TipContainer extends Component {
 	constructor(props) {
 	  super(props);
@@ -22,7 +24,7 @@ class TipContainer extends Component {
 				return false
 			}
 			localWeb3.eth.sendTransaction({
-	      to: '0xf17f52151ebef6c7334fad080c5704d77216b732',
+	      to: config.get('ethTipAddress'),
 	      from: user_address,
 	      value: localWeb3.utils.toWei('1', 'wei'),
 	    }, function (err, transactionHash) {
