@@ -53,4 +53,32 @@ insert explanation of how livepeer works (the decentralized video transcoding pa
 
 We could also have used the livepeer.js video player to play the video, which is a wrapper around HLS.js
 
-Now that we know how to play video using livepeer, let's build a client experience that's a bit richer than currently exists.  Imagine you're streaming video where a presenter is communicating with an in person audience as well as an online audience.  It would be great if the presenter could take questions/interact with the folks online.  Let's add a chatroom into the client app next to the live video stream.  Since we're already in the Ethereum ecosystem, it would also be great to allow consumers of the stream to tip the broadcaster natively in ETH.  
+Now that we know how to play video using livepeer, let's build a client experience that's a bit richer than currently exists.  Imagine you're streaming video where a presenter is communicating with an in person audience as well as an online audience.  It would be great if the presenter could take questions/interact with the folks online.  Let's add a chatroom into the client app next to the live video stream.  Since we're already in the Ethereum ecosystem, it would also be great to allow consumers of the stream to tip the broadcaster natively in ETH.  Lastly, we'd like to use the Livepeer SDK to estimate how much it's costing us to stream our video content.  
+
+Since we're not focused on building a chat app, let's use an open source websocket powered chatroom and add livepeer to it.  I'm going to use something built with create react app that we can use as the scaffolding of our project and uses socket.io as the API to our websocket server.  [Here's a good starting point](https://github.com/vlw0052/Tutorial---ReactJS-and-Socket.io-Chat-App).
+
+Once we have our react app, let's `npm install` to install our dependencies and work on adding livepeer.
+
+Layout.js is our main insertion point for our react app.  Let's add another component to it that will render our Livepeer video feed.  
+
+```jsx
+render() {
+  const { title } = this.props
+  const { socket, user } = this.state
+  return (
+    <div className='body-container'>
+      <VideoContainer streamId={'myManifestId'}/>
+      <div className="chat-container">
+        {
+          !user ?
+          <LoginForm socket={socket} setUser={this.setUser} />
+          :
+          <ChatContainer socket={socket} user={user} logout={this.logout}/>
+        }
+      </div>
+    </div>
+  );
+}
+```  
+
+We'll pass in a streamId that we can hardcode for now just to get it working that we'll later replace with a dynamic prop pulled from a url param.
