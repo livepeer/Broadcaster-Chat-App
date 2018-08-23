@@ -1,6 +1,5 @@
 import LivepeerSDK from '@livepeer/sdk'
 import React, { Component } from 'react';
-import { inspect } from 'util'
 import config from 'react-global-configuration';
 
 class StreamInfo extends Component {
