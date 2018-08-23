@@ -33,7 +33,7 @@ The simplest way to understand all of this is to [create the simplest webpage th
 
 Before we create the client code, let's set up a stream.  
 [Follow the guides to set up a node and broadcast](https://github.com/livepeer/wiki/wiki/Blueprint:-set-up-a-broadcasting-node-using-Livepeer-and-OBS)
-You should see your stream id in the console log in the Livepeer node terminal window, but you can always curl the server ```curl http://localhost:8935/manifestID``` to get the streamId.  Note (on my terminal) it prints out with a percent sign on the end, DO NOT include that in your stream id. For example, one my terminal I see 1220b0336cf5c3c34c0a05e5f8d9a6fb8874a091ff47a9546cf748d8e93827b00501a2cc4ea49099d7164a5676a04320c18c4048ea41d7b0fb2c5f0e94a81a8c97ef%, but my streamId = 1220b0336cf5c3c34c0a05e5f8d9a6fb8874a091ff47a9546cf748d8e93827b00501a2cc4ea49099d7164a5676a04320c18c4048ea41d7b0fb2c5f0e94a81a8c97ef
+You should see your stream id in the console log in the Livepeer node terminal window, but you can always curl the server ```curl http://localhost:8935/manifestID``` to get the streamId.  Note (on my terminal) it prints out with a percent sign on the end, DO NOT include that in your stream id. For example, one my terminal I see ```1220b0336cf5c3c34c0a05e5f8d9a6fb8874a091ff47a9546cf748d8e93827b00501a2cc4ea49099d7164a5676a04320c18c4048ea41d7b0fb2c5f0e94a81a8c97ef%```, but my ```streamId = 1220b0336cf5c3c34c0a05e5f8d9a6fb8874a091ff47a9546cf748d8e93827b00501a2cc4ea49099d7164a5676a04320c18c4048ea41d7b0fb2c5f0e94a81a8c97ef```
 
 We can use the Livepeer player but to understand what's happening, let's build our own.  Currently most browsers don't support HLS in a standard HTML5 video tag, so we'll need to use a library to help us play the stream.  For that we'll use [HLS.js](https://github.com/video-dev/hls.js/).  [Google Chrome no longer allows videos to autoplay](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes) so we'll need to add a button to manually allow the stream to start.  
 On our html page, we'll load the hls Javascript file, our local javascript file we're calling hlsplayer.js, our css and we'll have a div that contains our video element.  
@@ -354,4 +354,4 @@ In this component we need to do a few things:
 - render the price per segment and the total cost
 
 
-##Moving to a publicly accessible server
+## Moving to a publicly accessible server
