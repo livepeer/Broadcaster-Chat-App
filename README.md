@@ -33,7 +33,7 @@ The simplest way to understand all of this is to [create the simplest webpage th
 
 Before we create the client code, let's set up a stream.  
 [Follow the guides to set up a node and broadcast](https://github.com/livepeer/wiki/wiki/Blueprint:-set-up-a-broadcasting-node-using-Livepeer-and-OBS)
-You should see your stream id in the console log in the Livepeer node terminal window, but you can always curl the server ```curl http://localhost:8935/manifestID``` to get the streamId.  Note (on my terminal) it prints out with a percent sign on the end, DO NOT include that in your stream id. For example, one my terminal I see ```1220b0336cf5c3c34c0a05e5f8d9a6fb8874a091ff47a9546cf748d8e93827b00501a2cc4ea49099d7164a5676a04320c18c4048ea41d7b0fb2c5f0e94a81a8c97ef%```, but my ```streamId = 1220b0336cf5c3c34c0a05e5f8d9a6fb8874a091ff47a9546cf748d8e93827b00501a2cc4ea49099d7164a5676a04320c18c4048ea41d7b0fb2c5f0e94a81a8c97ef```
+You should see your stream id in the console log in the Livepeer node terminal window, but you can always curl the server ```curl http://localhost:8935/manifestID``` to get the streamId.  Note (on my terminal) it prints out with a percent sign on the end, DO NOT include that in your stream id.
 
 We can use the Livepeer player but to understand what's happening, let's build our own.  Currently most browsers don't support HLS in a standard HTML5 video tag, so we'll need to use a library to help us play the stream.  For that we'll use [HLS.js](https://github.com/video-dev/hls.js/).  [Google Chrome no longer allows videos to autoplay](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes) so we'll need to add a button to manually allow the stream to start.  
 On our html page, we'll load the hls Javascript file, our local javascript file we're calling hlsplayer.js, our css and we'll have a div that contains our video element.  
@@ -51,7 +51,7 @@ If you have your livepeer node running, and a stream coming from obs, you should
 Let's break down what's going on here.  
 insert explanation of how livepeer works (the decentralized video transcoding part)
 
-We could also have used the livepeer.js video player to play the video, which is a wrapper around HLS.js
+We could also have used the [livepeer.js video player](https://github.com/livepeer/livepeerjs/tree/master/packages/chroma) to play the video, which is a React component wrapping around HLS.js
 
 Now that we know how to play video using livepeer, let's build a client experience that's a bit richer than currently exists.  Imagine you're streaming video where a presenter is communicating with an in person audience as well as an online audience.  It would be great if the presenter could take questions/interact with the folks online.  Let's add a chatroom into the client app next to the live video stream.  Since we're already in the Ethereum ecosystem, it would also be great to allow consumers of the stream to tip the broadcaster natively in ETH.  Lastly, we'd like to use the Livepeer SDK to estimate how much it's costing us to stream our video content.  
 
@@ -355,3 +355,11 @@ In this component we need to do a few things:
 
 
 ## Moving to a publicly accessible server
+Running a node locally is great, and anyone on your local network will be able to connect to your local IP but if you'd like to stream to the public internet you'll need to run a node on a server with a public IP address.  We'll use EC2 (but feel free to use any server you choose)  
+
+We'll need to do the same setup we did to run the livepeer node locally.  Follow the same instructions to download the livepeer node, request test ETH and request LPT.  We'll change our OBS streaming destination to have our EC2 instances public IP address. ```rtmp://my.ip.address.ec2:1935/movie```.  Make sure to change the security settings to open the following ports.
+- 1935 (for livepeer)
+- 3000 (for our react app)
+- 3231 (for our websockets)
+- 8935 (for livepeer)
+Note: when we boot up our livepeer node on the ec2 instance we'll need to boot up the livepeer node with the ```--rtmpAddr 0.0.0.0 and -httpAddr 0.0.0.0``` flags
