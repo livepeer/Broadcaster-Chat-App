@@ -16,7 +16,7 @@ class StreamInfo extends Component {
 		  const jobs = await rpc.getJobs({ broadcaster: config.get('ETHAddress')})
 			const job = jobs.filter(job => job.streamId.substring(0,132) == this.props.streamId)
 			var pricePerSegment = "can't find job";
-			if (jobs[0].length > 0) {
+			if (jobs.length > 0) {
 				const jobObject = await rpc.getJob(job[0].id);
 				const transcoder = await rpc.getTranscoder(jobObject.transcoder);
 				pricePerSegment = transcoder.pricePerSegment;
