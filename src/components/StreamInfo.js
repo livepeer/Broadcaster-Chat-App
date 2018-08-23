@@ -15,14 +15,21 @@ class StreamInfo extends Component {
 		  const { rpc } = sdk
 		  const jobs = await rpc.getJobs({ broadcaster: config.get('ETHAddress')})
 			const job = jobs.filter(job => job.streamId.substring(0,132) == this.props.streamId)
-			const jobObject = await rpc.getJob(job[0].id)
-			const transcoder = await rpc.getTranscoder(jobObject.transcoder)
-			self.setState({pricePerSegment: transcoder.pricePerSegment})
+			var pricePerSegment = "can't find job";
+			if (jobs[0].length > 0) {
+				const jobObject = await rpc.getJob(job[0].id);
+				const transcoder = await rpc.getTranscoder(jobObject.transcoder);
+				pricePerSegment = transcoder.pricePerSegment;
+			}
+			self.setState({pricePerSegment: pricePerSegment})
 		})
 		setInterval(function(){ self.setState({secondsElapsed: self.state.secondsElapsed + 1}) }, 1000);
   }
 
 	totalBroadcastPrice() {
+		if (this.state.pricePerSegment == "can't find job") {
+			return "can't find job"
+		}
 		return this.state.pricePerSegment * this.state.secondsElapsed
 	}
 
