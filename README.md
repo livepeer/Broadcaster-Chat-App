@@ -19,17 +19,13 @@ Topics Covered:
 - HTTP Live Streaming (HLS) and the m3u8 format
 
 To wrap your head around how Livepeer fits into the video streaming ecosystem let's first take a look at a video streaming diagram and consider all the pieces of the stack required to stream/play a video.
-
-Insert diagram here
-
+![livepeer network flow](https://i.imgur.com/qhublsD.jpg)
 
 As you can see, we need something to capture the video and send it to the Livepeer network/a livepeer node.  The Livepeer node consists of the [Livepeer Media Server] (https://github.com/livepeer/wiki/wiki/Livepeer-Media-Server) and Ethereum code which connects to a network of Livepeer nodes who will transcode the stream.
 
 If we'd like our stream to be accessible to anyone on the public internet, we'll need to run a server that has a publicly accessible IP address like an AWS EC2 instance.  Otherwise, most computers sit on a local network that is not reachable by people not connected to the same router.  If you're at a hackathon you can bind the node to port 0.0.0.0 rather than localhost so other people on the same network can reach your stream.  
 
-insert explanation of the rtmp Protocol
-
-The simplest way to understand all of this is to [create the simplest webpage that can play a livepeer stream](https://github.com/blake41/livepeer-simple-video-player).  
+The best way to understand all of this is to [create the simplest webpage that can play a livepeer stream](https://github.com/blake41/livepeer-simple-video-player).  
 
 Before we create the client code, let's set up a stream.  
 [Follow the guides to set up a node and broadcast](https://github.com/livepeer/wiki/wiki/Blueprint:-set-up-a-broadcasting-node-using-Livepeer-and-OBS)
@@ -48,10 +44,7 @@ In our Javascript, we need to do a few things:
 
 If you have your livepeer node running, and a stream coming from obs, you should be able to click the play button and see your stream!  
 
-Let's break down what's going on here.  
-insert explanation of how livepeer works (the decentralized video transcoding part)
-
-We could also have used the [livepeer.js video player](https://github.com/livepeer/livepeerjs/tree/master/packages/chroma) to play the video, which is a React component wrapping around HLS.js
+We could also have used the [livepeer.js video player](https://github.com/livepeer/livepeerjs/tree/master/packages/chroma) to play the video, which is a React component wrapped around HLS.js
 
 Now that we know how to play video using livepeer, let's build a client experience that's a bit richer than currently exists.  Imagine you're streaming video where a presenter is communicating with an in person audience as well as an online audience.  It would be great if the presenter could take questions/interact with the folks online.  Let's add a chatroom into the client app next to the live video stream.  Since we're already in the Ethereum ecosystem, it would also be great to allow consumers of the stream to tip the broadcaster natively in ETH.  Lastly, we'd like to use the Livepeer SDK to estimate how much it's costing us to stream our video content.  
 
