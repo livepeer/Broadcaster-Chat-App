@@ -5,7 +5,7 @@ import config from 'react-global-configuration';
 class StreamInfo extends Component {
 	constructor(props) {
 	  super(props);
-		this.state = {pricePerSegment: null, secondsElapsed: 0}
+		this.state = {pricePerSegment: 'unknown', secondsElapsed: 0}
 		this.totalBroadcastPrice = this.totalBroadcastPrice.bind(this);
 	}
 
@@ -27,7 +27,7 @@ class StreamInfo extends Component {
   }
 
 	totalBroadcastPrice() {
-		if (this.state.pricePerSegment == "can't find job") {
+		if (this.state.pricePerSegment == "can't find job" || this.state.pricePerSegment == 'unknown') {
 			return "can't find job"
 		}
 		return this.state.pricePerSegment * this.state.secondsElapsed
@@ -35,7 +35,7 @@ class StreamInfo extends Component {
 
 	render() {
 		return (
-    	<div className='stream-info-container'>
+    	<div className='stream-info-container default-font default-font-color'>
 				<div>{`The price for each 4 second segment is: ${this.state.pricePerSegment}`}</div>
 				<div>{`The cost to transcode this broadcast since you've been connected is: ${this.totalBroadcastPrice()}`}</div>
 			</div>

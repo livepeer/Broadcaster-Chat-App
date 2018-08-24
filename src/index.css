@@ -17,7 +17,8 @@ textarea {
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center
+    align-items: center;
+    margin: -50px auto;
 }
 
 .login-form {
@@ -50,9 +51,19 @@ textarea {
     color: #c92c43
 }
 
+.stream-count {
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+.stream-count-container {
+  /* margin-left: 30px; */
+}
+
 .video-container {
   width: 100%;
-  height: 100%;
   text-align: center;
 }
 
@@ -62,6 +73,31 @@ textarea {
 
 .stream-info-container {
   text-align: center;
+}
+
+.globe-icon {
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  vertical-align: middle;
+}
+
+video {
+  border-radius: 10px;
+}
+
+.broadcaster-info-container {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.broadcasters-city {
+  display: inline-block;
+}
+
+.broadcasters-country {
+  display: inline-block;
+  padding-left: 2px;
 }
 
 .tip-button {
@@ -80,6 +116,11 @@ textarea {
   vertical-align: top;
 }
 
+.main-body-container {
+  margin-top: 50px;
+  height: inherit;
+}
+
 .tip-button:hover {
   background-image: url('images/1_pay_mm_over.png');
 }
@@ -92,11 +133,55 @@ textarea {
   height: 84%;
 }
 
+.stream-header {
+  margin: 25px 0;
+  text-align: center;
+}
+
+.stream-title {
+  color: #ff5757;
+  font-weight: 300;
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+
+.users-logo {
+  height: 25px;
+  width: 25px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.default-font {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.default-font-color {
+  color: #484d79;
+}
+
+.stream-header-container {
+  margin-top: 15px;
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
 .chat-container {
   width: 50%;
   display: inline-block;
   height: 100%;
   vertical-align: top;
+  position: relative;
+  top: -25px;
+}
+
+.chat-container-inner {
+  margin: 0 50px;
+  height: inherit;
+}
+
+[data-reactroot] {
+  height: 100% !important;
 }
 
 .chat {
@@ -105,7 +190,10 @@ textarea {
   flex-direction: row;
   align-items: flex-start;
   height: 100%;
-  width: 100%;
+  /* width: 90%; */
+  /* margin: 0px auto; */
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 #side-bar {
@@ -312,7 +400,7 @@ textarea {
 
 .chat-room-container {
     height: 100%;
-    width: 76.25%
+    width: 100%;
 }
 
 @media screen and (max-width: 510px) {
