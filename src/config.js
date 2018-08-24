@@ -1,5 +1,5 @@
 const config = {
-    serverIp: 'localhost',
+    serverIp: '34.201.26.245',
     ethTipAddress: '0xf17f52151ebef6c7334fad080c5704d77216b732',
     broadcasterInfo: {
       ETHAddress: '0x4e2096f524bFDc0d6E94F6cD5550CA4cB0351A40',
