@@ -1,3 +1,5 @@
+## A Livepeer End to End Tutorial
+
 ``` npm run react ``` to start React dev server.
 ``` npm run server ``` to start NodeJS Socket.io server.
 
@@ -356,3 +358,7 @@ We'll need to do the same setup we did to run the livepeer node locally.  Follow
 - 3231 (for our websockets)
 - 8935 (for livepeer)
 Note: when we boot up our livepeer node on the ec2 instance we'll need to boot up the livepeer node with the ```--rtmpAddr 0.0.0.0 and -httpAddr 0.0.0.0``` flags
+
+Pull down your repo, ```npm install```, ```npm start``` and you should be able to see the client at http://yourip:3000/mystreamid in the browser!
+
+You can get mystreamid by curling from the shell ```curl http://localhost:8935/manifestID``` on the server.
