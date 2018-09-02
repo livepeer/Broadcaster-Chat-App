@@ -21,7 +21,7 @@ Topics Covered:
 - HTTP Live Streaming (HLS) and the m3u8 format
 
 To wrap your head around how Livepeer fits into the video streaming ecosystem let's first take a look at a video streaming diagram and consider all the pieces of the stack required to stream/play a video.
-![livepeer network flow](https://i.imgur.com/qhublsD.jpg)
+![livepeer network flow](https://i.imgur.com/PDioPnY.png)
 
 As you can see, we need something to capture the video and send it to the Livepeer network/a livepeer node.  The Livepeer node consists of the [Livepeer Media Server] (https://github.com/livepeer/wiki/wiki/Livepeer-Media-Server) and Ethereum code which connects to a network of Livepeer nodes who will transcode the stream.
 
