@@ -1,9 +1,9 @@
 ## A Livepeer Broadcasters End to End Tutorial
 ### Table of Contents
-* Introduction/Ecosystem Explanation
-* Simple Livepeer Video Player
-* Livepeer Chat App
-* Deploy the Chat App
+* [Introduction/Ecosystem Explanation](#introduction)
+* [Simple Livepeer Video Player](#simple-livepeer-video-player)
+* [Livepeer Chat App](#livepeer-chat-application)
+* [Deploy the Chat App](#deploy-our-chat-app)
 
 ### Introduction
 This tutorial will show you the power of livepeer and how you as a web developer might be able to leverage the platform to enhance the decentralized streaming ecosystem.  
