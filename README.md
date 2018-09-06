@@ -120,9 +120,9 @@ import config from 'react-global-configuration';
 
 class VideoContainer extends Component {
 
-	source() {
-		return `http://${config.get('serverIp')}:7935/stream/${this.props.streamId}.m3u8`
-	}
+  source() {
+    return `http://${config.get('serverIp')}:8935/stream/${this.props.streamId}.m3u8`
+  }
 
   render() {
     return(
@@ -130,10 +130,11 @@ class VideoContainer extends Component {
         <div className="video-container">
           <ReactHLS url={this.source()} />
         </div>
+        <TipContainer />
+        <StreamInfo streamId={this.props.streamId}/>
       </div>
     )
   }
-
 }
 
 export default VideoContainer
@@ -144,26 +145,13 @@ In our VideoContainer component, let's use a react HLS component to display the 
 Here's the css we'll add
 ```css
 
-.video-container {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-}
-
-.tip-container {
-  text-align: center;
-}
-
-.stream-info-container {
-  text-align: center;
-}
-
 .tip-button {
   width: 304px;
   height: 89px;
   background-size: 100%;
   background-image: url('images/1_pay_mm_off.png');
   cursor: pointer;
+  display: inline-block;
 }
 
 .left-container {
@@ -171,6 +159,11 @@ Here's the css we'll add
   display: inline-block;
   width: 50%;
   vertical-align: top;
+}
+
+.main-body-container {
+  margin-top: 50px;
+  height: inherit;
 }
 
 .tip-button:hover {
@@ -185,12 +178,69 @@ Here's the css we'll add
   height: 84%;
 }
 
+.stream-header {
+  margin: 25px 0;
+  text-align: center;
+}
+
+.stream-title {
+  color: #ff5757;
+  font-weight: 300;
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+
+.users-logo {
+  height: 25px;
+  width: 25px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.default-font {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.default-font-color {
+  color: #484d79;
+}
+
+.stream-header-container {
+  margin-top: 15px;
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
 .chat-container {
   width: 50%;
   display: inline-block;
   height: 100%;
   vertical-align: top;
+  position: relative;
+  top: -25px;
 }
+
+.chat-container-inner {
+  margin: 0 50px;
+  height: inherit;
+}
+
+[data-reactroot] {
+  height: 100% !important;
+}
+
+.chat {
+  color: #cac8ee;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  height: 100%;
+  /* width: 90%; */
+  /* margin: 0px auto; */
+  overflow: hidden;
+  border-radius: 10px;
+}
+
 ```
 
 Let's create a config.js file in the root directory with the following info:
@@ -218,7 +268,8 @@ constructor(props) {
   this.state = {
     socketUrl : "http://" + config.get('serverIp') + ":3231",
     socket:null,
-    user:null
+    user:null,
+    connectedUsers: {}
   };
 }
 ```
@@ -250,51 +301,51 @@ import Web3 from 'web3'
 import config from 'react-global-configuration';
 
 class TipContainer extends Component {
-	constructor(props) {
-	  super(props);
-	}
+  constructor(props) {
+    super(props);
+  }
 
   handleClick() {
-		var user_address = undefined;
+    var user_address = undefined;
     if (typeof web3 === 'undefined') {
       return alert('You need to install MetaMask to use this feature.  https://metamask.io')
     }
-		var localWeb3 = new Web3(window.web3.currentProvider)
-		const getAccount = async () => {
-	  	const accounts = await localWeb3.eth.getAccounts();
-			return accounts[0]
-		};
-		const sendEth = async () => {
-			user_address  = await getAccount()
-			if(user_address === undefined) {
-				alert('please unlock metamask by inputting your password')
-				return false
-			}
-			localWeb3.eth.sendTransaction({
-	      to: config.get('ethTipAddress'),
-	      from: user_address,
-	      value: localWeb3.utils.toWei('1', 'wei'),
-	    }, function (err, transactionHash) {
-	      if (err) return console.log('Oh no!: ' + err.message)
-	      console.log('Thanks!')
-	    })
-		}
-		sendEth()
+    var localWeb3 = new Web3(window.web3.currentProvider)
+    const getAccount = async () => {
+      const accounts = await localWeb3.eth.getAccounts();
+      return accounts[0]
+    };
+    const sendEth = async () => {
+      user_address  = await getAccount()
+      if(user_address === undefined) {
+        alert('please unlock metamask by inputting your password')
+        return false
+      }
+      localWeb3.eth.sendTransaction({
+        to: config.get('ethTipAddress'),
+        from: user_address,
+        value: localWeb3.utils.toWei('1', 'wei'),
+      }, function (err, transactionHash) {
+        if (err) return console.log('Oh no!: ' + err.message)
+        console.log('Thanks!')
+      })
+    }
+    sendEth()
   }
 
-	render() {
-		return (
+  render() {
+    return (
       <div className="tip-container">
         <div className="tip-button" onClick={this.handleClick}></div>
       </div>
-		);
-	}
+    );
+  }
 }
 
 export default TipContainer
 ```
 
-Let's dig into what's going on.  First let's npm install --save web3 which will import the web3 library which allows us to communicate with the ethereum network via metamask.  Either send yourself some ETH or request more test ETH for it from the faucet.
+Let's dig into what's going on.  First let's ```npm install --save web3``` which will import the web3 library which allows us to communicate with the ethereum network via metamask.  Either send yourself some ETH or request more test ETH for it from the faucet.
 
 When a user clicks on our tip button we need to do a number of things:
 
@@ -314,60 +365,68 @@ We've now implemented a chatroom, live video streaming, and the ability to tip t
 Let's add a StreamInfo component to our VideoContainer component and pass along the streamId.
 
 ```jsx
-  render() {
-    return(
-      <div className='left-container'>
-        <div className="video-container">
-          <ReactHLS url={this.source()} />
-        </div>
-        <TipContainer />
-        <StreamInfo streamId={this.props.streamId}/>
+render() {
+  return(
+    <div className='left-container'>
+      <div className="video-container">
+        <ReactHLS url={this.source()} />
       </div>
-    )
-  }
+      <TipContainer />
+      <StreamInfo streamId={this.props.streamId}/>
+    </div>
+  )
+}
 ```
 
+And here's out StreamInfo component
+
 ```jsx
-  import LivepeerSDK from '@livepeer/sdk'
-  import React, { Component } from 'react';
-  import config from 'react-global-configuration';
+import LivepeerSDK from '@livepeer/sdk'
+import React, { Component } from 'react';
+import config from 'react-global-configuration';
 
-  class StreamInfo extends Component {
-  	constructor(props) {
-  	  super(props);
-  		this.state = {pricePerSegment: null, secondsElapsed: 0}
-  		this.totalBroadcastPrice = this.totalBroadcastPrice.bind(this);
-  	}
-
-    componentDidMount() {
-  		var self = this;
-  		LivepeerSDK({ provider: config.get('provider'), controllerAddress: config.get('controllerAddress') }).then(async sdk => {
-  		  const { rpc } = sdk
-  		  const jobs = await rpc.getJobs({ broadcaster: config.get('ETHAddress')})
-  			const job = jobs.filter(job => job.streamId.substring(0,132) == this.props.streamId)
-  			const jobObject = await rpc.getJob(job[0].id)
-  			const transcoder = await rpc.getTranscoder(jobObject.transcoder)
-  			self.setState({pricePerSegment: transcoder.pricePerSegment})
-  		})
-  		setInterval(function(){ self.setState({secondsElapsed: self.state.secondsElapsed + 1}) }, 1000);
-    }
-
-  	totalBroadcastPrice() {
-  		return this.state.pricePerSegment * this.state.secondsElapsed
-  	}
-
-  	render() {
-  		return (
-      	<div className='stream-info-container'>
-  				<div>{`The price for each 4 second segment is: ${this.state.pricePerSegment}`}</div>
-  				<div>{`The cost to transcode this broadcast since you've been connected is: ${this.totalBroadcastPrice()}`}</div>
-  			</div>
-  		);
-  	}
+class StreamInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {pricePerSegment: 'unknown', secondsElapsed: 0}
+    this.totalBroadcastPrice = this.totalBroadcastPrice.bind(this);
   }
 
-  export default StreamInfo
+  componentDidMount() {
+    var self = this;
+    LivepeerSDK({ provider: config.get('provider'), controllerAddress: config.get('controllerAddress') }).then(async sdk => {
+      const { rpc } = sdk
+      const jobs = await rpc.getJobs({ broadcaster: config.get('ETHAddress')})
+      const job = jobs.filter(job => job.streamId.substring(0,132) == this.props.streamId)
+      var pricePerSegment = "can't find job";
+      if (jobs.length > 0) {
+        const jobObject = await rpc.getJob(job[0].id);
+        const transcoder = await rpc.getTranscoder(jobObject.transcoder);
+        pricePerSegment = transcoder.pricePerSegment;
+      }
+      self.setState({pricePerSegment: pricePerSegment})
+    })
+    setInterval(function(){ self.setState({secondsElapsed: self.state.secondsElapsed + 1}) }, 1000);
+  }
 
+  totalBroadcastPrice() {
+    if (this.state.pricePerSegment == "can't find job" || this.state.pricePerSegment == 'unknown') {
+      return "can't find job"
+    }
+    return this.state.pricePerSegment * this.state.secondsElapsed
+  }
+
+  render() {
+    return (
+      <div className='stream-info-container default-font default-font-color'>
+        <div>{`The price for each 4 second segment is: ${this.state.pricePerSegment}`}</div>
+        <div>{`The cost to transcode this broadcast since you've been connected is: ${this.totalBroadcastPrice()}`}</div>
+      </div>
+    );
+  }
+}
+
+export default StreamInfo
 ```
 
 In this component we need to do a few things:
@@ -384,7 +443,7 @@ In this component we need to do a few things:
 - render the price per segment and the total cost
 
 
-## Moving to a publicly accessible server
+## Deploy Our Chat App
 Running a node locally is great, and anyone on your local network will be able to connect to your local IP but if you'd like to stream to the public internet you'll need to run a node on a server with a public IP address.  We'll use EC2 (but feel free to use any server you choose)  
 
 We'll need to do the same setup we did to run the livepeer node locally.  Follow the same instructions to download the livepeer node, request test ETH and request LPT.  We'll change our OBS streaming destination to have our EC2 instances public IP address. ```rtmp://my.ip.address.ec2:1935/movie```.  Make sure to change the security settings to open the following ports.
