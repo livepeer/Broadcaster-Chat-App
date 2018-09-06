@@ -1,8 +1,11 @@
-## A Livepeer End to End Tutorial
+## A Livepeer Broadcasters End to End Tutorial
+### Table of Contents
+* Introduction/Ecosystem Explanation
+* Simple Livepeer Video Player
+* Livepeer Chat App
+* Deploy the Chat App
 
-``` npm run react ``` to start React dev server.
-``` npm run server ``` to start NodeJS Socket.io server.
-
+### Introduction
 This tutorial will show you the power of livepeer and how you as a web developer might be able to leverage the platform to enhance the decentralized streaming ecosystem.  
 
 Topics Covered:
@@ -13,7 +16,7 @@ Topics Covered:
 - AWS EC2
 - Metamask
 - Ethereum
-- Ethereum Rinkeby
+- Rinkeby Testnet
 - Video Streaming using OBS
 - RTMP Protocol
 - HLS.JS
@@ -27,18 +30,20 @@ As you can see, we need something to capture the video and send it to the Livepe
 
 If we'd like our stream to be accessible to anyone on the public internet, we'll need to run a server that has a publicly accessible IP address like an AWS EC2 instance.  Otherwise, most computers sit on a local network that is not reachable by people not connected to the same router.  If you're at a hackathon you can bind the node to port 0.0.0.0 rather than localhost so other people on the same network can reach your stream.  
 
-The best way to understand all of this is to [create the simplest webpage that can play a livepeer stream](https://github.com/blake41/livepeer-simple-video-player).  
+### Simple Livepeer Video Player
+
+The best way to understand all of this is to [create the simplest webpage that can play a livepeer stream](https://github.com/blake41/livepeer-simple-video-player).  If you'd like to just clone the code feel free to clone that working repo and just edit the source of the video.  Or you can start from scratch and follow the instructions below.
 
 Before we create the client code, let's set up a stream.  
 [Follow the guides to set up a node and broadcast](https://github.com/livepeer/wiki/wiki/Blueprint:-set-up-a-broadcasting-node-using-Livepeer-and-OBS)
-You should see your stream id in the console log in the Livepeer node terminal window, but you can always curl the server ```curl http://localhost:8935/manifestID``` to get the streamId.  Note (on my terminal) it prints out with a percent sign on the end, DO NOT include that in your stream id.
+You should see your stream id in the console log in the Livepeer node terminal window, but you can always curl the server ```curl http://localhost:7935/manifestID``` to get the streamId.  Note (on my terminal) it prints out with a percent sign on the end, DO NOT include that in your stream id.
 
 We can use the Livepeer player but to understand what's happening, let's build our own.  Currently most browsers don't support HLS in a standard HTML5 video tag, so we'll need to use a library to help us play the stream.  For that we'll use [HLS.js](https://github.com/video-dev/hls.js/).  [Google Chrome no longer allows videos to autoplay](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes) so we'll need to add a button to manually allow the stream to start.  
 On our html page, we'll load the hls Javascript file, our local javascript file we're calling hlsplayer.js, our css and we'll have a div that contains our video element.  
 
 In our Javascript, we need to do a few things:
-- hard code our streamID (which can be found by running ```curl http://localhost:8935/manifestID``` which will request the streamId from the livepeer node)
-- Set our source to be 'http://localhost:8935/stream/' + streamId + '.m3u8'
+- hard code our streamID (which can be found by running ```curl http://localhost:7935/manifestID``` which will request the streamId from the livepeer node)
+- Set our source to be 'http://localhost:7935/stream/' + streamId + '.m3u8'
 - Create a new instance of HLS,
   - load the source
   - attach the player to the video element
@@ -46,32 +51,62 @@ In our Javascript, we need to do a few things:
 
 If you have your livepeer node running, and a stream coming from obs, you should be able to click the play button and see your stream!  
 
-We could also have used the [livepeer.js video player](https://github.com/livepeer/livepeerjs/tree/master/packages/chroma) to play the video, which is a React component wrapped around HLS.js
+Rather than starting from scratch, we could have used the [livepeer.js react component](https://github.com/livepeer/livepeerjs/tree/master/packages/chroma) to play the video, which is a React component wrapped around HLS.js.
+
+### Livepeer Chat Application
+
+#### Note: For the next section of the tutorial, the code included in this repo should be ready to clone and run, so feel free to use that as a reference or create a new repository and follow along as we build the chat app.
 
 Now that we know how to play video using livepeer, let's build a client experience that's a bit richer than currently exists.  Imagine you're streaming video where a presenter is communicating with an in person audience as well as an online audience.  It would be great if the presenter could take questions/interact with the folks online.  Let's add a chatroom into the client app next to the live video stream.  Since we're already in the Ethereum ecosystem, it would also be great to allow consumers of the stream to tip the broadcaster natively in ETH.  Lastly, we'd like to use the Livepeer SDK to estimate how much it's costing us to stream our video content.  
 
-Since we're not focused on building a chat app, let's use an open source websocket powered chatroom and add livepeer to it.  I'm going to use something built with create react app that we can use as the scaffolding of our project and uses socket.io as the API to our websocket server.  [Here's a good starting point](https://github.com/vlw0052/Tutorial---ReactJS-and-Socket.io-Chat-App).
+Since the focus of this tutorial is not building a chat app, let's use an open source websocket powered chatroom and add livepeer to it.  
 
-Once we have our react app, let's `npm install` to install our dependencies and work on adding livepeer.
+#### [Clone this repository as the base of our application](https://github.com/vlw0052/Tutorial---ReactJS-and-Socket.io-Chat-App)
+
+#### Note: This repo is built with create-react-app and will serve as the scaffolding of our project.
+
+Once we have our react app, run `npm install` to install our dependencies and work on adding livepeer.
 
 Layout.js is our main insertion point for our react app.  Let's add another component to it that will render our Livepeer video feed.  
 
 ```jsx
 render() {
-  const { title } = this.props
-  const { socket, user } = this.state
-  return (
-    <div className='body-container'>
-      <VideoContainer streamId={'myManifestId'}/>
-      <div className="chat-container">
-        {
-          !user ?
-          <LoginForm socket={socket} setUser={this.setUser} />
-          :
-          <ChatContainer socket={socket} user={user} logout={this.logout}/>
-        }
-      </div>
-    </div>
+	const { title } = this.props
+		const { socket, user } = this.state
+		const broadcaster = config.get('broadcasterInfo')
+		return (
+			<div className='body-container'>
+				<div className='stream-header-container'>
+					<div className='stream-title default-font'>{broadcaster.title}</div>
+					<img className='globe-icon' src='/images/globe.png'></img>
+					<div className='broadcaster-info-container default-font default-font-color'>
+						<div className='broadcasters-name'>{`${broadcaster.firstName} ${broadcaster.lastName}`}</div>
+						<div className='broadcasters-city'>{`${broadcaster.city},`}</div>
+						<div className='broadcasters-country'>{broadcaster.country}</div>
+					</div>
+				</div>
+				<div className="main-body-container">
+					<VideoContainer streamId={this.props.match.params.streamId}
+						connectedUsers={this.state.connectedUsers}
+					/>
+					<div className="chat-container">
+						<div className="chat-container-inner">
+							<div className='stream-count-container'>
+								<img src='/images/users.png' className='users-logo'></img>
+								<div className='stream-count default-font default-font-color'>
+									{`Viewers: ${Object.keys(this.state.connectedUsers).length}`}
+								</div>
+							</div>
+							{
+								!user ?
+								<LoginForm socket={socket} setUser={this.setUser} />
+								:
+								<ChatContainer socket={socket} user={user} logout={this.logout}/>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
   );
 }
 ```  
@@ -86,7 +121,7 @@ import config from 'react-global-configuration';
 class VideoContainer extends Component {
 
 	source() {
-		return `http://${config.get('serverIp')}:8935/stream/${this.props.streamId}.m3u8`
+		return `http://${config.get('serverIp')}:7935/stream/${this.props.streamId}.m3u8`
 	}
 
   render() {
@@ -356,9 +391,9 @@ We'll need to do the same setup we did to run the livepeer node locally.  Follow
 - 1935 (for livepeer)
 - 3000 (for our react app)
 - 3231 (for our websockets)
-- 8935 (for livepeer)
+- 7935 (for livepeer)
 Note: when we boot up our livepeer node on the ec2 instance we'll need to boot up the livepeer node with the ```--rtmpAddr 0.0.0.0 and -httpAddr 0.0.0.0``` flags
 
 Pull down your repo, ```npm install```, ```npm start``` and you should be able to see the client at http://yourip:3000/mystreamid in the browser!
 
-You can get mystreamid by curling from the shell ```curl http://localhost:8935/manifestID``` on the server.
+You can get mystreamid by curling from the shell ```curl http://localhost:7935/manifestID``` on the server.
