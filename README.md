@@ -72,41 +72,41 @@ Layout.js is our main insertion point for our react app.  Let's add another comp
 ```jsx
 render() {
 	const { title } = this.props
-		const { socket, user } = this.state
-		const broadcaster = config.get('broadcasterInfo')
-		return (
-			<div className='body-container'>
-				<div className='stream-header-container'>
-					<div className='stream-title default-font'>{broadcaster.title}</div>
-					<img className='globe-icon' src='/images/globe.png'></img>
-					<div className='broadcaster-info-container default-font default-font-color'>
-						<div className='broadcasters-name'>{`${broadcaster.firstName} ${broadcaster.lastName}`}</div>
-						<div className='broadcasters-city'>{`${broadcaster.city},`}</div>
-						<div className='broadcasters-country'>{broadcaster.country}</div>
-					</div>
+	const { socket, user } = this.state
+	const broadcaster = config.get('broadcasterInfo')
+	return (
+		<div className='body-container'>
+			<div className='stream-header-container'>
+				<div className='stream-title default-font'>{broadcaster.title}</div>
+				<img className='globe-icon' src='/images/globe.png'></img>
+				<div className='broadcaster-info-container default-font default-font-color'>
+					<div className='broadcasters-name'>{`${broadcaster.firstName} ${broadcaster.lastName}`}</div>
+					<div className='broadcasters-city'>{`${broadcaster.city},`}</div>
+					<div className='broadcasters-country'>{broadcaster.country}</div>
 				</div>
-				<div className="main-body-container">
-					<VideoContainer streamId={this.props.match.params.streamId}
-						connectedUsers={this.state.connectedUsers}
-					/>
-					<div className="chat-container">
-						<div className="chat-container-inner">
-							<div className='stream-count-container'>
-								<img src='/images/users.png' className='users-logo'></img>
-								<div className='stream-count default-font default-font-color'>
-									{`Viewers: ${Object.keys(this.state.connectedUsers).length}`}
-								</div>
+			</div>
+			<div className="main-body-container">
+				<VideoContainer streamId={this.props.match.params.streamId}
+					connectedUsers={this.state.connectedUsers}
+				/>
+				<div className="chat-container">
+					<div className="chat-container-inner">
+						<div className='stream-count-container'>
+							<img src='/images/users.png' className='users-logo'></img>
+							<div className='stream-count default-font default-font-color'>
+								{`Viewers: ${Object.keys(this.state.connectedUsers).length}`}
 							</div>
-							{
-								!user ?
-								<LoginForm socket={socket} setUser={this.setUser} />
-								:
-								<ChatContainer socket={socket} user={user} logout={this.logout}/>
-							}
 						</div>
+						{
+							!user ?
+							<LoginForm socket={socket} setUser={this.setUser} />
+							:
+							<ChatContainer socket={socket} user={user} logout={this.logout}/>
+						}
 					</div>
 				</div>
 			</div>
+		</div>
   );
 }
 ```  
