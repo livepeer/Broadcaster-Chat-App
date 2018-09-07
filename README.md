@@ -464,5 +464,5 @@ When running on the testnet there are a few errors you might get
 * ![Can't Connect to RPC](https://i.imgur.com/0IOO141.png)
 For both of these errors, the solution is to set the price you're willing to pay to be higher.  The smart contract first filters by price, then by stake.  On the testnet, Livepeer maintains some nodes that you can rely on that charge a higher fee so that you can make sure you're matched with them.  Otherwise you might be paired with a transcoder that's not working correctly or is offline.
 
-### Changing Price
-* From the livepeer CLI, choose ```15 (Set Broadcast Config)``` and enter ```200```
+  #### Solutions
+  Change the price you're willing to pay for transcoding. From the livepeer CLI, choose ```15 (Set Broadcast Config)``` and enter ```200```
