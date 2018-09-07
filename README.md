@@ -4,6 +4,7 @@
 * [Simple Livepeer Video Player](#simple-livepeer-video-player)
 * [Livepeer Chat App](#livepeer-chat-application)
 * [Deploy the Chat App](#deploy-our-chat-app)
+* [Errors](#errors)
 
 ### Introduction
 This tutorial will show you the power of livepeer and how you as a web developer might be able to leverage the platform to enhance the decentralized streaming ecosystem.  
@@ -443,7 +444,7 @@ In this component we need to do a few things:
 - render the price per segment and the total cost
 
 
-## Deploy Our Chat App
+### Deploy Our Chat App
 Running a node locally is great, and anyone on your local network will be able to connect to your local IP but if you'd like to stream to the public internet you'll need to run a node on a server with a public IP address.  We'll use EC2 (but feel free to use any server you choose)  
 
 We'll need to do the same setup we did to run the livepeer node locally.  Follow the same instructions to download the livepeer node, request test ETH and request LPT.  We'll change our OBS streaming destination to have our EC2 instances public IP address. ```rtmp://my.ip.address.ec2:1935/movie```.  Make sure to change the security settings to open the following ports.
@@ -456,3 +457,12 @@ Note: when we boot up our livepeer node on the ec2 instance we'll need to boot u
 Pull down your repo, ```npm install```, ```npm start``` and you should be able to see the client at http://yourip:3000/mystreamid in the browser!
 
 You can get mystreamid by curling from the shell ```curl http://localhost:7935/manifestID``` on the server.
+
+### Errors
+When running on the testnet there are a few errors you might get
+* ![No Service URI](https://i.imgur.com/lGmObvg.png)
+* ![Can't Connect to RPC](https://i.imgur.com/0IOO141.png)
+For both of these errors, the solution is to set the price you're willing to pay to be higher.  The smart contract first filters by price, then by stake.  On the testnet, Livepeer maintains some nodes that you can rely on that charge a higher fee so that you can make sure you're matched with them.  Otherwise you might be paired with a transcoder that's not working correctly or is offline.
+
+### Changing Price
+* From the livepeer CLI, choose ```15 (Set Broadcast Config)``` and enter ```200```
